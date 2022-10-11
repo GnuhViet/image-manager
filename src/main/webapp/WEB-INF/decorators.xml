@@ -3,6 +3,7 @@
     <!--Any urls that are exclude will never be decorated by Sitemesh-->
     <excludes>
         <pattern>/api*</pattern>
+        <pattern>/manage/file*</pattern>
     </excludes>
 
     <!--apply Sitemesh default template-->

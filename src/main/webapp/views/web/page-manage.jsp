@@ -1,3 +1,4 @@
+<%@ include file="/common/taglib.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
@@ -18,6 +19,10 @@
                                 </a>
                                 <a class="pgn__num" style="padding: 6px; font-size: x-large" href="#0">
                                     <i class="fa fa-trash-o bigger-110 pink"></i>
+                                </a>
+                                <c:url var="folderManage" value="/manage/file"/>
+                                <a href="#" onClick="MyWindow=window.open('${folderManage}','MyWindow','width=1000,height=800'); return false;">
+                                    ImageManager
                                 </a>
                             </div>
                         </div>
