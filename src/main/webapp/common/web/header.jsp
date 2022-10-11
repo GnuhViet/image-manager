@@ -75,7 +75,7 @@
                             &ensp;${sessionScope.get('UserModel').fullName}
                         </a>
                         <ul class="sub-menu">
-                            <li><a href="<c:url value="/profile"/>">Profile Settings</a></li>
+                            <li><a href="<c:url value="/profile"/>">Profile</a></li>
                             <li><a href="<c:url value="/manage"/>">Manager blog</a></li>
                             <li><a href="<c:url value="/"/>">Activity</a></li>
                             <li><a href="<c:url value="/logout"/>">Logout</a></li>

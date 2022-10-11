@@ -6,23 +6,23 @@
     </head>
     <body>
         <main class="row s-styles">
-
-
             <section id="styles" class="column large-full">
                 <div class="row add-bottom">
                     <div class="column large-full">
                         <div class="row row-baseline">
                             <h3>Blog Manager</h3>
                             <div class="column" style="display: flex; justify-content: flex-end">
-                                <a class="pgn__num" style="padding: 6px; font-size: x-large" href="#0">
+                                <a class="pgn__num" style="padding: 6px; font-size: x-large" href="<c:url value="/manage/edit"/>">
                                     <i class="fa fa-plus-circle bigger-110 purple"></i>
                                 </a>
                                 <a class="pgn__num" style="padding: 6px; font-size: x-large" href="#0">
                                     <i class="fa fa-trash-o bigger-110 pink"></i>
                                 </a>
+
                                 <c:url var="folderManage" value="/manage/file"/>
-                                <a href="#" onClick="MyWindow=window.open('${folderManage}','MyWindow','width=1000,height=800'); return false;">
-                                    ImageManager
+                                <a href="#" onClick="MyWindow=window.open('${folderManage}','MyWindow','width=1000,height=700'); return false;"
+                                   class="pgn__num" style="padding: 6px; font-size: x-large">
+                                    <i class="fa fa-folder-open-o bigger-110"></i>
                                 </a>
                             </div>
                         </div>
