@@ -46,7 +46,7 @@ public class UserApi extends HttpServlet {
         UserModel updateModel = HttpUtil.of(req.getReader()).toModel(UserModel.class);
         String message = userService.update(updateModel);
 
-        //update session if update profile successz
+        //update session if update profile success
         if ("success".equals(message)) {
             req.getSession().removeAttribute("UserModel");
             req.getSession().setAttribute("UserModel", userService.findById(updateModel.getId()));
