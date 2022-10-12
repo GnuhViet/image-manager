@@ -19,8 +19,11 @@
                                     <i class="fa fa-trash-o bigger-110 pink"></i>
                                 </a>
 
-                                <c:url var="folderManage" value="/manage/file"/>
-                                <a href="#" onClick="MyWindow=window.open('${folderManage}','MyWindow','width=1000,height=700'); return false;"
+                                <c:url var="folderManage" value="/manage/file">
+                                    <c:param name="folderPath" value="home"/>
+                                </c:url>
+
+                                <a href="${folderManage}" onClick="MyWindow=window.open('${folderManage}','MyWindow','width=1000,height=700'); return false;"
                                    class="pgn__num" style="padding: 6px; font-size: x-large">
                                     <i class="fa fa-folder-open-o bigger-110"></i>
                                 </a>

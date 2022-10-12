@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/manage", "/manage/edit", "/manage/file"})
+@WebServlet(urlPatterns = {"/manage", "/manage/edit"})
 public class ManagerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -21,13 +21,7 @@ public class ManagerController extends HttpServlet {
         if("/manage/edit".equals(req.getServletPath())) {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/views/web/page-editblog.jsp");
             dispatcher.forward(req, resp);
-            return;
         }
 
-        if("/manage/file".equals(req.getServletPath())) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/views/web/page-filemanage.jsp");
-            dispatcher.forward(req, resp);
-            return;
-        }
     }
 }
