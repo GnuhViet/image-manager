@@ -20,7 +20,7 @@ public class ArticleDAO extends AbstractDAO<ArticleModel> implements IArticleDAO
     }
 
     @Override
-    public UserModel read(Long id) {
+    public ArticleModel read(Long id) {
         return null;
     }
 
