@@ -1,6 +1,6 @@
 package com.example.webblog.model;
 
-public class Comments extends AbstractModel {
+public class CommentsModel extends AbstractModel {
     private String content;
     private Long userId;
     private Long articleId;

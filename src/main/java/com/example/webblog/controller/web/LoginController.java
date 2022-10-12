@@ -60,7 +60,7 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if ("/login".equals(req.getServletPath())) {
             UserModel model = FormUtil.toModel(UserModel.class, req);
-            model = userService.findUserIdByUserNameAndPassword(model.getUsername(), model.getPassword());
+            model = userService.findByUserNameAndPassword(model.getUsername(), model.getPassword());
             if (model != null) {
                 req.getSession().setAttribute("UserModel", model);
                 resp.sendRedirect(req.getContextPath() + "/home");

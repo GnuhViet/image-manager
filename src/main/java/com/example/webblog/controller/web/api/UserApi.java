@@ -20,50 +20,48 @@ public class UserApi extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
         UserModel userModel = HttpUtil.of(req.getReader()).toModel(UserModel.class);
         UserModel res = userService.read(userModel.getId());
-        mapper.writeValue(resp.getOutputStream(), res);
+        new ObjectMapper().writeValue(resp.getOutputStream(), res);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
         UserModel userModel = HttpUtil.of(req.getReader()).toModel(UserModel.class);
         String message = userService.create(userModel);
-        mapper.writeValue(resp.getOutputStream(), message);
+        new ObjectMapper().writeValue(resp.getOutputStream(), message);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
         UserModel updateModel = HttpUtil.of(req.getReader()).toModel(UserModel.class);
         String message = userService.update(updateModel);
+
+        //update session if update profile success
         if ("success".equals(message)) {
-            req.getSession().removeAttribute("UserModel"); //update session
+            req.getSession().removeAttribute("UserModel");
             req.getSession().setAttribute("UserModel", userService.findById(updateModel.getId()));
         }
 
-        mapper.writeValue(resp.getOutputStream(), message);
+        new ObjectMapper().writeValue(resp.getOutputStream(), message);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
         UserModel deleteModel = HttpUtil.of(req.getReader()).toModel(UserModel.class);
         String message = userService.delete(deleteModel.getId());
-        mapper.writeValue(resp.getOutputStream(), message);
+        new ObjectMapper().writeValue(resp.getOutputStream(), message);
     }
 }
