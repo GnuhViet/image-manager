@@ -1,6 +1,5 @@
 package com.example.webblog.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FolderModel {
@@ -12,10 +11,18 @@ public class FolderModel {
     private List<String> childFolders; // luu ten cua child folder
     private List<String> images; // luu ten cua item trong folder
 
-    public FolderModel() {
-        childFolders = new ArrayList<>();
-        images = new ArrayList<>();
+    public enum UpdateType{
+        rename,
+        move,
+        copy,
+        paste
     }
+
+    private String folderNewName;
+    private List<String> moveFolders;
+    private List<String> copyFolders;
+    private String pasteDestination;
+    private UpdateType updateType;
 
     public Long getUserId() {
         return userId;
@@ -58,6 +65,49 @@ public class FolderModel {
     }
 
     public String getRealFolderPath() {
+        if (folderPath == null) {
+            folderPath = "home";
+        }
         return severPath + folderPath.replace("home", String.valueOf(userId));
+    }
+
+    public String getFolderNewName() {
+        return folderNewName;
+    }
+
+    public void setFolderNewName(String folderNewName) {
+        this.folderNewName = folderNewName;
+    }
+
+    public List<String> getMoveFolders() {
+        return moveFolders;
+    }
+
+    public void setMoveFolders(List<String> moveFolders) {
+        this.moveFolders = moveFolders;
+    }
+
+    public List<String> getCopyFolders() {
+        return copyFolders;
+    }
+
+    public void setCopyFolders(List<String> copyFolders) {
+        this.copyFolders = copyFolders;
+    }
+
+    public String getPasteDestination() {
+        return pasteDestination;
+    }
+
+    public void setPasteDestination(String pasteDestination) {
+        this.pasteDestination = pasteDestination;
+    }
+
+    public UpdateType getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(UpdateType updateType) {
+        this.updateType = updateType;
     }
 }

@@ -2,9 +2,10 @@ package com.example.webblog.service.impl;
 
 import com.example.webblog.model.FolderModel;
 import com.example.webblog.service.IFolderService;
-
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +13,31 @@ import java.util.List;
 public class FolderService implements IFolderService {
 
     @Override
+    public boolean exist(FolderModel model) {
+        File folder = new File(model.getRealFolderPath());
+        return Files.exists(folder.toPath());
+    }
+
+    @Override
     public FolderModel create(FolderModel model) {
-        File file = new File(model.getRealFolderPath());
-        if (Files.exists(file.toPath())) {
+        File folder = new File(model.getRealFolderPath());
+        if (Files.exists(folder.toPath())) {
             return null;
         }
-        file.mkdirs();
-        model.setFolderName(file.getName());
+        folder.mkdirs();
+        model.setFolderName(folder.getName());
         return model;
     }
 
     @Override
     public void read(FolderModel model) {
-        File file = new File(model.getRealFolderPath());
-        File[] items = file.listFiles();
+        File folder = new File(model.getRealFolderPath());
+        File[] items =  folder.listFiles();
         if (items == null) {
             return;
         }
 
-        model.setFolderName(file.getName());
+        model.setFolderName( folder.getName());
         List<String> childFolder = new ArrayList<>();
         List<String> images = new ArrayList<>();
 
@@ -50,11 +57,35 @@ public class FolderService implements IFolderService {
     }
 
     @Override
-    public void update(FolderModel model) {
+    public String update(FolderModel model) {
+        File folder = new File(model.getRealFolderPath());
+
+        if (model.getUpdateType() == FolderModel.UpdateType.rename) {
+            File oldFolderName = new File(folder.toPath() + "/" + model.getFolderName());
+            File newFolderName = new File(folder.toPath() + "/" + model.getFolderNewName());
+            if (Files.exists(newFolderName.toPath())) {
+                return "folder da ton tai"; //new folder name is exits
+            }
+
+            if (oldFolderName.renameTo(newFolderName)) {
+                return "rename thanh cong"; //success
+            }
+            return "rename that bai"; //fail
+        }
+
+        return null;
     }
 
     @Override
     public void delete(FolderModel model) {
+        File folder = new File(model.getRealFolderPath());
+        if (!Files.exists(folder.toPath())) {
+            return;
+        }
+        try {
+            FileUtils.deleteDirectory(folder);
+        } catch (IOException ignored) {
+        }
     }
 
 }

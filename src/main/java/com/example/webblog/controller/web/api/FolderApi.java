@@ -59,11 +59,34 @@ public class FolderApi extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //TODO rename
+        UserModel curr = defaultConfig(req, resp);
+        if (curr == null) {
+            return;//
+        }
 
+        FolderModel updateModel = HttpUtil.of(req.getReader()).toModel(FolderModel.class);
+        updateModel.setUserId(curr.getId());
+
+        // new copy hay move thi tao cookies khong thi perform update
+        String updateMsg = folderService.update(updateModel);
+
+        new ObjectMapper().writeValue(resp.getOutputStream(), updateMsg);
+        //TODO bam copy/move thi reload va co button paste
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UserModel curr = defaultConfig(req, resp);
+        if (curr == null) {
+            return;//
+        }
 
+        FolderModel createModel = HttpUtil.of(req.getReader()).toModel(FolderModel.class);
+        createModel.setUserId(curr.getId());
+
+        folderService.delete(createModel);
+
+        new ObjectMapper().writeValue(resp.getOutputStream(), JsonFolder.of(createModel));
     }
 }

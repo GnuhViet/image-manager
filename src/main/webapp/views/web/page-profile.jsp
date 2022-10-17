@@ -71,6 +71,7 @@
                             return;
                         }
                         alert("Update thanh cong");
+                        location.reload();
                     },
                     error: function (error) {
                         alert("Loi he thong!");

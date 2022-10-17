@@ -51,30 +51,38 @@ public abstract class AbstractDAO<T> {
         }
     }
 
-    protected String update(String sql, Object... parameters) {
+    protected Long update(String sql, Object... parameters) {
+        ResultSet rs = null;
         Connection con = null;
         PreparedStatement pre = null;
+        long id = 1L;
         try {
             con = getConnection();
             con.setAutoCommit(false);
-            pre = con.prepareStatement(sql);
+            pre = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             setParameter(pre, parameters);
             pre.executeUpdate();
+            rs = pre.getGeneratedKeys();
+            if (rs.next()) {
+                id = rs.getLong(1);
+            }
             con.commit();
-            return "success";
+            return id;
         } catch (SQLException e) {
             try {
                 con.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return "fail";
+            return null;
         } finally {
             try {
                 if (con != null)
                     con.close();
                 if (pre != null)
                     pre.close();
+                if (rs != null)
+                    rs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

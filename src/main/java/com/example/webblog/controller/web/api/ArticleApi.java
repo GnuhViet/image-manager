@@ -36,7 +36,7 @@ public class ArticleApi extends HttpServlet {
         resp.setContentType("application/json");
 
         ArticleModel model = HttpUtil.of(req.getReader()).toModel(ArticleModel.class);
-        String res = articleService.create(model);
+        Long res = articleService.create(model) ;
         mapper.writeValue(resp.getOutputStream(), res);
     }
 

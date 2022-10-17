@@ -4,8 +4,6 @@ import com.example.webblog.model.APIResponseModel.JsonFolder;
 import com.example.webblog.model.FolderModel;
 import com.example.webblog.model.UserModel;
 import com.example.webblog.service.IFolderService;
-import com.example.webblog.utils.FormUtil;
-import com.example.webblog.utils.HttpUtil;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -23,20 +21,39 @@ public class FolderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/web/page-filemanage.jsp");
-
         Object obj = req.getSession().getAttribute("UserModel");
         UserModel curr = (UserModel) obj;
         if (obj == null) {
             return; // trang bao loi than thien
         }
 
-        FolderModel readFolder = new FolderModel();
-        readFolder.setFolderPath(req.getParameter("folderPath"));
-        readFolder.setUserId(curr.getId());
-        folderService.read(readFolder);
-        req.setAttribute("FolderModel", JsonFolder.of(readFolder));
+        String folderPath = req.getParameter("folderPath");
+        if (!folderPath.startsWith("home")) {
+            resp.sendRedirect(req.getContextPath() + "/manage/file?folderPath=home");
+            return;
+        }
 
+        if (folderPath.endsWith("/")) {
+            StringBuilder sb = new StringBuilder(folderPath);
+            while (sb.charAt(sb.length()-1) == '/') {
+                sb.deleteCharAt(sb.length()-1);
+            }
+            folderPath = sb.toString();
+            resp.sendRedirect(req.getContextPath() + "/manage/file?folderPath=" + folderPath);
+            return;
+        }
+
+        FolderModel readFolder = new FolderModel();
+        readFolder.setFolderPath(folderPath);
+        readFolder.setUserId(curr.getId());
+        if (!folderService.exist(readFolder)) {
+            resp.sendRedirect(req.getContextPath() + "/manage/file?folderPath=home");
+            return;
+        }
+        folderService.read(readFolder);
+
+        req.setAttribute("FolderModel", JsonFolder.of(readFolder));
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/views/web/page-filemanage.jsp");
         dispatcher.forward(req, resp);
     }
 }

@@ -23,7 +23,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String create(UserModel userModel) {
+    public Long create(UserModel userModel) {
         userModel.setCreateDate(new Timestamp(System.currentTimeMillis()));
         userModel.setAvatar("user.png");
         userModel.setStatus(1);
@@ -37,7 +37,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String update(UserModel updateModel) {
+    public boolean update(UserModel updateModel) {
         UserModel old = findById(updateModel.getId());
 
         if (updateModel.getAvatar() == null) {
@@ -51,7 +51,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String delete(Long id) {
+    public boolean delete(Long id) {
         return userDAO.delete(id);
     }
 }

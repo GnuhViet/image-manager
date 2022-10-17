@@ -36,7 +36,7 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO{
     }
 
     @Override
-    public String create(UserModel userModel) {
+    public Long create(UserModel userModel) {
         return update(createQuery,
                 userModel.getUsername(),
                 userModel.getPassword(),
@@ -61,8 +61,8 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO{
     }
 
     @Override
-    public String update(UserModel updateModel) {
-        return update(updateQuery,
+    public boolean update(UserModel updateModel) {
+        Long updateId = update(updateQuery,
                 updateModel.getPassword(),
                 updateModel.getFullName(),
                 updateModel.getEmail(),
@@ -70,11 +70,13 @@ public class UserDAO extends AbstractDAO<UserModel> implements IUserDAO{
                 updateModel.getAvatar(),
                 updateModel.getModifiedDate(),
                 updateModel.getId());
+        return updateId == 1L;
     }
 
     @Override
-    public String delete(Long id) {
-        return update("Update user SET status = 0 WHERE id = ?" , id);
+    public boolean delete(Long id) {
+        Long deleteId = update("Update user SET status = 0 WHERE id = ?" , id);
+        return deleteId == 1L;
     }
 
 }

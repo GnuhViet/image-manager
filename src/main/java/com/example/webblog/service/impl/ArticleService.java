@@ -18,8 +18,8 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public String create(ArticleModel model) {
-        return null; //articleDAO.create(model);
+    public Long create(ArticleModel model) {
+        return -1L; //articleDAO.create(model);
     }
 
     @Override
@@ -29,12 +29,12 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public String update(ArticleModel model) {
-        return null;//articleDAO.update(model);
+    public boolean update(ArticleModel model) {
+        return false;//articleDAO.update(model);
     }
 
     @Override
-    public String delete(Long id) {
-        return null; //articleDAO.delete(id);
+    public boolean delete(Long id) {
+        return false; //articleDAO.delete(id);
     }
 }

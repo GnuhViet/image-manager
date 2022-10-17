@@ -15,7 +15,7 @@ public class ArticleDAO extends AbstractDAO<ArticleModel> implements IArticleDAO
     }
 
     @Override
-    public String create(ArticleModel articleModel) {
+    public Long create(ArticleModel articleModel) {
         return null;
     }
 
@@ -25,12 +25,12 @@ public class ArticleDAO extends AbstractDAO<ArticleModel> implements IArticleDAO
     }
 
     @Override
-    public String update(ArticleModel articleModel) {
-        return null;
+    public boolean update(ArticleModel articleModel) {
+        return false;
     }
 
     @Override
-    public String delete(Long id) {
-        return null;
+    public boolean delete(Long id) {
+        return false;
     }
 }
