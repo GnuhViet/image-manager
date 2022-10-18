@@ -14,7 +14,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script type='text/javascript' src='<c:url value="/assets/admin/js/jquery-2.2.3.min.js" />'></script>
-    </head  >
+    </head>
     <body>
         <div class="container flex-grow-1 light-style container-p-y">
             <c:set var="FolderModel" value="${requestScope.get('FolderModel')}"/>
@@ -54,9 +54,11 @@
                         </div>
                     </div>
                     <div>
-                        <button type="button" style="text-align: right" class="btn btn-secondary icon-btn mr-2" disabled="">
-                            <i class="ion ion-md-cloud-download"></i> Paste
-                        </button>
+                        <c:if test="${not empty sessionScope.get('updateModel')}">
+                            <button id="btn-paste" type="button" style="text-align: right" class="btn btn-primary icon-btn mr-2">
+                                <i class="ion ion-md-cloud-download"></i> ${sessionScope.get('updateModel').updateType.name()} to here!
+                            </button>
+                        </c:if>
                     </div>
                 </div>
 
@@ -440,6 +442,21 @@
 
         <c:url var="APIUrl" value="/api-folder"/>
         <script>
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            function eraseCookie(name) {
+                createCookie(name, "", -1);
+            }
+
             function createFolder(data) {
                 $.ajax({
                     url: '${APIUrl}',
@@ -477,7 +494,9 @@
                     contentType: 'application/json',
                     data: JSON.stringify(data),
                     success: function (result) {
-                        alert(result);
+                        if (result != null) {
+                            alert(result);
+                        }
                         location.reload();
                     },
                     error: function (result) {
@@ -521,11 +540,22 @@
                 let checkItem = $('.file-item-checkbox input[type=checkbox]:checked').map(function () {return $(this).val();}).get();
 
                 let classList = $(this).attr('class').split(/\s+/);
-
                 data[classList[1]+'Folders'] = checkItem;
                 data['folderPath'] = $(this).val();
                 data['updateType'] = classList[1];
                 console.log(data);
+                updateFolder(data);
+            })
+
+            $('#btn-paste').click(function (e) {
+                e.preventDefault();
+                let data = {};
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                data['folderPath'] = urlParams.get('folderPath');
+                data['updateType'] = "paste";
+                console.log(data);
+                updateFolder(data);
             })
         </script>
     </body>

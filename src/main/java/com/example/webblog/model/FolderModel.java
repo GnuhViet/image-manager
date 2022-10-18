@@ -15,14 +15,31 @@ public class FolderModel {
         rename,
         move,
         copy,
+        remove,
         paste
     }
 
     private String folderNewName;
     private List<String> moveFolders;
     private List<String> copyFolders;
-    private String pasteDestination;
+    private List<String> removeFolders;
     private UpdateType updateType;
+
+    public String getRealPathOf(String folderPath) {
+        if (folderPath == null) {
+            folderPath = "home";
+        }
+        if ("home".equals(folderPath)) {
+            return severPath + folderPath.replace("home", String.valueOf(userId));
+        }
+        // home/asdfa/home/zcvzxc
+        StringBuilder sb = new StringBuilder(folderPath);
+        while (sb.charAt(0) != '/') {
+            sb.deleteCharAt(0);
+        }
+        sb.insert(0, userId);
+        return severPath + sb;
+    }
 
     public Long getUserId() {
         return userId;
@@ -65,10 +82,7 @@ public class FolderModel {
     }
 
     public String getRealFolderPath() {
-        if (folderPath == null) {
-            folderPath = "home";
-        }
-        return severPath + folderPath.replace("home", String.valueOf(userId));
+        return getRealPathOf(this.folderPath);
     }
 
     public String getFolderNewName() {
@@ -95,19 +109,19 @@ public class FolderModel {
         this.copyFolders = copyFolders;
     }
 
-    public String getPasteDestination() {
-        return pasteDestination;
-    }
-
-    public void setPasteDestination(String pasteDestination) {
-        this.pasteDestination = pasteDestination;
-    }
-
     public UpdateType getUpdateType() {
         return updateType;
     }
 
     public void setUpdateType(UpdateType updateType) {
         this.updateType = updateType;
+    }
+
+    public List<String> getRemoveFolders() {
+        return removeFolders;
+    }
+
+    public void setRemoveFolders(List<String> removeFolders) {
+        this.removeFolders = removeFolders;
     }
 }

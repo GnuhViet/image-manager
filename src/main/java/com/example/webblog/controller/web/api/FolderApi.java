@@ -69,9 +69,46 @@ public class FolderApi extends HttpServlet {
         updateModel.setUserId(curr.getId());
 
         // new copy hay move thi tao cookies khong thi perform update
-        String updateMsg = folderService.update(updateModel);
+        ObjectMapper mapper = new ObjectMapper();
+        String updateMsg = null;
 
-        new ObjectMapper().writeValue(resp.getOutputStream(), updateMsg);
+        switch (updateModel.getUpdateType()) {
+            case copy:
+            case move:
+                req.getSession().setAttribute("updateModel", updateModel);
+                updateMsg = "di chuyen den thu muc muon paste paste";
+                break;
+            case remove:
+                folderService.deleteList(updateModel);
+                break;
+            case rename:
+                updateMsg = folderService.rename(updateModel);
+                break;
+            case paste: {
+                Object obj = req.getSession().getAttribute("updateModel");
+                if (obj == null) {
+                    break;
+                }
+                FolderModel oldModel = (FolderModel) obj;
+                switch (oldModel.getUpdateType()) {
+                    case copy:
+                        folderService.copy(oldModel, updateModel);
+                        break;
+                    case move:
+                        folderService.move(oldModel, updateModel);
+                        break;
+                    default:
+                        break;
+                }
+                req.getSession().removeAttribute("updateModel");
+                break;
+            }
+            default:
+                updateMsg = "hanh dong khong hop le";
+                break;
+        }
+
+        mapper.writeValue(resp.getOutputStream(), updateMsg);
         //TODO bam copy/move thi reload va co button paste
     }
 

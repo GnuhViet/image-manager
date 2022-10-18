@@ -6,7 +6,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class FolderService implements IFolderService {
     }
 
     @Override
-    public String update(FolderModel model) {
+    public String rename(FolderModel model) {
         File folder = new File(model.getRealFolderPath());
 
         if (model.getUpdateType() == FolderModel.UpdateType.rename) {
@@ -73,6 +74,61 @@ public class FolderService implements IFolderService {
             return "rename that bai"; //fail
         }
 
+        return null;
+    }
+
+    @Override
+    public String move(FolderModel model, FolderModel paste) {
+        return copy(model, paste, true);
+    }
+
+    @Override
+    public String copy(FolderModel model, FolderModel paste) {
+        return copy(model, paste, false);
+    }
+
+    @Override
+    public void deleteList(FolderModel model) {
+        List<File> childList = new ArrayList<>();
+        String childLocation = model.getRealFolderPath();
+        for (String child : model.getRemoveFolders()) { //model.getRealPathOf(childLocation) + "/" +
+            childList.add(new File(childLocation + "/" + child));
+        }
+        for (File file : childList) {
+            try {
+                FileUtils.deleteDirectory(file);
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    private String copy(FolderModel model, FolderModel paste, boolean isMove) {
+        List<File> childList = new ArrayList<>();
+        String childLocation = model.getRealFolderPath();
+        File pasteLocation = new File(paste.getRealFolderPath());
+
+        if (isMove) {
+            for (String child : model.getMoveFolders()) { //model.getRealPathOf(childLocation) + "/" +
+                childList.add(new File(childLocation + "/" + child));
+            }
+        } else {
+            for (String child : model.getCopyFolders()) { //model.getRealPathOf(childLocation) + "/" +
+                childList.add(new File(childLocation + "/" + child));
+            }
+        }
+
+        for (File file : childList) {
+            try {
+                Path original = Paths.get(file.toURI());
+                Path newPath = Paths.get(pasteLocation.toURI());
+                FileUtils.copyDirectoryToDirectory(file, pasteLocation);
+                if (isMove){
+                    FileUtils.deleteDirectory(file);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return null;
     }
 
