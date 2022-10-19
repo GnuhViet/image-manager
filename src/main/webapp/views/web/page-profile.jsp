@@ -19,7 +19,7 @@
                                     <label for="imageUpload" style="line-height: 1"></label>
                                 </div>
                                 <div class="avatar-preview" style="box-sizing: content-box">
-                                    <c:url value="/image/${user.avatar}" var="UserImageURL"/>
+                                    <c:url value="/image?type=avatar&filename=${user.avatar}" var="UserImageURL"/>
                                     <div id="imagePreview" style="background-image: url(${UserImageURL});">
                                     </div>
                                 </div>

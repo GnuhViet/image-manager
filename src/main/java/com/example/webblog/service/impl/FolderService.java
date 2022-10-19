@@ -33,12 +33,12 @@ public class FolderService implements IFolderService {
     @Override
     public void read(FolderModel model) {
         File folder = new File(model.getRealFolderPath());
-        File[] items =  folder.listFiles();
+        File[] items = folder.listFiles();
         if (items == null) {
             return;
         }
 
-        model.setFolderName( folder.getName());
+        model.setFolderName(folder.getName());
         List<String> childFolder = new ArrayList<>();
         List<String> images = new ArrayList<>();
 
@@ -94,9 +94,16 @@ public class FolderService implements IFolderService {
         for (String child : model.getRemoveFolders()) { //model.getRealPathOf(childLocation) + "/" +
             childList.add(new File(childLocation + "/" + child));
         }
+        for (String child : model.getRemoveImages()) {
+            childList.add(new File(childLocation + "/" + child));
+        }
         for (File file : childList) {
             try {
-                FileUtils.deleteDirectory(file);
+                if (file.isFile()) {
+                    FileUtils.deleteQuietly(file);
+                } else {
+                    FileUtils.deleteDirectory(file);
+                }
             } catch (IOException ignored) {
             }
         }
@@ -111,19 +118,40 @@ public class FolderService implements IFolderService {
             for (String child : model.getMoveFolders()) { //model.getRealPathOf(childLocation) + "/" +
                 childList.add(new File(childLocation + "/" + child));
             }
+            for (String child : model.getMoveImages()) {
+                childList.add(new File(childLocation + "/" + child));
+            }
         } else {
             for (String child : model.getCopyFolders()) { //model.getRealPathOf(childLocation) + "/" +
+                childList.add(new File(childLocation + "/" + child));
+            }
+            for (String child : model.getCopyImages()) { //model.getRealPathOf(childLocation) + "/" +
                 childList.add(new File(childLocation + "/" + child));
             }
         }
 
         for (File file : childList) {
             try {
-                Path original = Paths.get(file.toURI());
-                Path newPath = Paths.get(pasteLocation.toURI());
-                FileUtils.copyDirectoryToDirectory(file, pasteLocation);
-                if (isMove){
-                    FileUtils.deleteDirectory(file);
+                File des = new File(paste.getRealFolderPath() + "/" + file.getName());
+                if (des.exists()) {
+                    if (des.isFile()) {
+                        FileUtils.deleteQuietly(des);
+                    } else {
+                        FileUtils.deleteDirectory(des);
+                    }
+                }
+                if (file.isFile()) {
+                    if (isMove) {
+                        FileUtils.moveFileToDirectory(file, pasteLocation, false);
+                    } else {
+                        FileUtils.copyToDirectory(file, pasteLocation);
+                    }
+                } else {
+                    if (isMove) {
+                        FileUtils.moveDirectoryToDirectory(file, pasteLocation, false);
+                    } else {
+                        FileUtils.copyDirectoryToDirectory(file, pasteLocation);
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -134,12 +162,16 @@ public class FolderService implements IFolderService {
 
     @Override
     public void delete(FolderModel model) {
-        File folder = new File(model.getRealFolderPath());
-        if (!Files.exists(folder.toPath())) {
+        File file = new File(model.getRealFolderPath());
+        if (!Files.exists(file.toPath())) {
             return;
         }
         try {
-            FileUtils.deleteDirectory(folder);
+            if (file.isFile()) {
+                FileUtils.deleteQuietly(file);
+            } else {
+                FileUtils.deleteDirectory(file);
+            }
         } catch (IOException ignored) {
         }
     }

@@ -40,9 +40,6 @@
                         <button type="button" class="btn btn-primary mr-2">
                             <i class="ion ion-md-cloud-upload"></i>&nbsp; Upload
                         </button>
-                        <button type="button" class="btn btn-secondary icon-btn mr-2" disabled="">
-                            <i class="ion ion-md-cloud-download"></i>
-                        </button>
                         <div class="btn-group mr-2">
                             <button type="button" class="btn btn-default md-btn-flat dropdown-toggle px-2" data-toggle="dropdown">
                                 <i class="ion ion-ios-settings"></i></button>
@@ -75,10 +72,7 @@
                 <c:forEach var="ChildFolderName" items="${FolderModel.childFolders}">
                     <div class="file-item" style="z-index: 1">
                         <c:url var="folderURL" value="/manage/file?folderPath=${FolderModel.folderPath}/${ChildFolderName}"/>
-                        <a href="${folderURL}" class="file-item-name">
-                            <div class="file-item-select-bg bg-primary"></div>
-                        </a>
-                        <label class="file-item-checkbox custom-control custom-checkbox">
+                        <label class="file-item-checkbox file-item-checkbox-folder custom-control custom-checkbox">
                             <input value="${ChildFolderName}" type="checkbox" class="custom-control-input"/>
                             <span class="custom-control-label"></span>
                         </label>
@@ -88,13 +82,54 @@
                         <a href="${folderURL}" class="file-item-name" style="text-decoration: none">
                                 ${ChildFolderName}
                         </a>
-                        <div class="file-item-changed">02/13/2018</div>
                         <div class="file-item-actions btn-group">
                             <button type="button" class="btn btn-default btn-sm rounded-pill icon-btn borderless md-btn-flat hide-arrow" data-toggle="dropdown">
                                 <i class="ion ion-ios-settings"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <form class="formRename-${ChildFolderName}" style="margin-bottom: 0">
+                                    <div class="dropdown-item">
+                                        <input name="folderNewName" value="${ChildFolderName}"  type="text" style="width: 112px">
+                                        <input name="folderName" value="${ChildFolderName}" type="hidden">
+                                        <input name="folderPath" value="${FolderModel.folderPath}" type="hidden" >
+                                        <button type="submit" value="${ChildFolderName}" class="btn btnSubmitRename btn-secondary mr-2">
+                                            <i class="ion ion-md-checkmark"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                                <button value="${FolderModel.folderPath}/${ChildFolderName}" class="btnRemove dropdown-item">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+
+                <c:forEach var="ChildFolderName" items="${FolderModel.images}">
+                    <div class="file-item" style="z-index: 1">
+                        <c:url var="folderURL" value="/manage/file?folderPath=${FolderModel.folderPath}/${ChildFolderName}"/>
+                        <c:url value="/image" var="imageURL">
+                            <c:param name="type" value="folder"/>
+                            <c:param name="folderPath" value="${FolderModel.folderPath}"/>
+                            <c:param name="filename" value="${ChildFolderName}"/>
+                        </c:url>
+                        <label class="file-item-checkbox file-item-checkbox-image custom-control custom-checkbox">
+                            <input value="${ChildFolderName}" type="checkbox" class="custom-control-input"/>
+                            <span class="custom-control-label"></span>
+                        </label>
+                        <a href="#"
+                           onClick="imgClick('${imageURL}');" class="file-item-name" style="text-decoration: none">
+                            <div class="file-item-img" style="background-image: url(${imageURL});"></div>
+                        </a>
+                        <a href="#"
+                           onClick="imgClick('${imageURL}');" class="file-item-name" style="text-decoration: none">
+                                ${ChildFolderName}
+                        </a>
+
+                        <div class="file-item-actions btn-group">
+                            <button type="button" class="btn btn-default btn-sm rounded-pill icon-btn borderless md-btn-flat hide-arrow" data-toggle="dropdown">
+                                <i class="ion ion-ios-settings"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <form class="formRename-${ChildFolderName.replace('.', '')}" style="margin-bottom: 0">
                                     <div class="dropdown-item">
                                         <input name="folderNewName" value="${ChildFolderName}"  type="text" style="width: 112px">
                                         <input name="folderName" value="${ChildFolderName}" type="hidden">
@@ -129,31 +164,14 @@
                         </form>
                     </div>
                 </div>
-
-                <%--            <div class="file-item">--%>
-                <%--                <div class="file-item-select-bg bg-primary"></div>--%>
-                <%--                <label class="file-item-checkbox custom-control custom-checkbox">--%>
-                <%--                    <input type="checkbox" class="custom-control-input"/>--%>
-                <%--                    <span class="custom-control-label"></span>--%>
-                <%--                </label>--%>
-                <%--                <div class="file-item-img" style="background-image: url(https://bootdey.com/img/Content/avatar/avatar1.png);"></div>--%>
-                <%--                <a href="javascript:void(0)" class="file-item-name">--%>
-                <%--                    Image-1.jpg--%>
-                <%--                </a>--%>
-                <%--                <div class="file-item-changed">02/20/2018</div>--%>
-                <%--                <div class="file-item-actions btn-group">--%>
-                <%--                    <button type="button" class="btn btn-default btn-sm rounded-pill icon-btn borderless md-btn-flat hide-arrow dropdown-toggle" data-toggle="dropdown">--%>
-                <%--                        <i class="ion ion-ios-more"></i></button>--%>
-                <%--                    <div class="dropdown-menu dropdown-menu-right">--%>
-                <%--                        <a class="dropdown-item" href="javascript:void(0)">Rename</a>--%>
-                <%--                        <a class="dropdown-item" href="javascript:void(0)">Move</a>--%>
-                <%--                        <a class="dropdown-item" href="javascript:void(0)">Copy</a>--%>
-                <%--                        <a class="dropdown-item" href="javascript:void(0)">Remove</a>--%>
-                <%--                    </div>--%>
-                <%--                </div>--%>
-                <%--            </div>--%>
-
             </div>
+        </div>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="modal-img">
+            <div id="caption"></div>
         </div>
 
         <style type="text/css">
@@ -438,25 +456,111 @@
                     width: calc(100% - 15rem);
                 }
             }
+
+            #myImg {
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            #myImg:hover {opacity: 0.7;}
+
+            /* The Modal (background) */
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                padding-top: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            }
+
+            /* Modal Content (image) */
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+
+            /* Caption of Modal Image */
+            #caption {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+                text-align: center;
+                color: #ccc;
+                padding: 10px 0;
+                height: 150px;
+            }
+
+            /* Add Animation */
+            .modal-content, #caption {
+                -webkit-animation-name: zoom;
+                -webkit-animation-duration: 0.6s;
+                animation-name: zoom;
+                animation-duration: 0.6s;
+            }
+
+            @-webkit-keyframes zoom {
+                from {-webkit-transform:scale(0)}
+                to {-webkit-transform:scale(1)}
+            }
+
+            @keyframes zoom {
+                from {transform:scale(0)}
+                to {transform:scale(1)}
+            }
+
+            /* The Close Button */
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #f1f1f1;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* 100% Image Width on Smaller Screens */
+            @media only screen and (max-width: 700px){
+                .modal-content {
+                    width: 100%;
+                }
+            }
         </style>
 
-        <c:url var="APIUrl" value="/api-folder"/>
         <script>
-            function readCookie(name) {
-                var nameEQ = name + "=";
-                var ca = document.cookie.split(';');
-                for (var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-                }
-                return null;
+            function imgClick(imgUrl){
+                console.log("check");
+                $('#modal-img').attr("src",imgUrl);
+                $('#myModal').css({"display": "block"});
             }
-
-            function eraseCookie(name) {
-                createCookie(name, "", -1);
+            // Get the <span> element that closes the modal
+            let span = document.getElementsByClassName("close")[0];
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                $('#myModal').css({"display": "none"});
             }
+        </script>
 
+        <c:url var="APIUrl" value="/api-folder"/>
+
+        <script>
             function createFolder(data) {
                 $.ajax({
                     url: '${APIUrl}',
@@ -494,9 +598,6 @@
                     contentType: 'application/json',
                     data: JSON.stringify(data),
                     success: function (result) {
-                        if (result != null) {
-                            alert(result);
-                        }
                         location.reload();
                     },
                     error: function (result) {
@@ -516,16 +617,14 @@
                 e.preventDefault();
                 let data = {};
                 data['folderPath'] = $(this).val();
-                alert($(this).val());
                 deleteFolder(data);
             })
 
             $('.btnSubmitRename').click(function (e) {
                 e.preventDefault();
                 let renameFolder = $(this).val();
-                alert($(this).val())
                 let data = {};
-                let formData = $('.formRename-' + renameFolder).serializeArray();
+                let formData = $('.formRename-' + renameFolder.replace('.', '')).serializeArray();
                 $.each(formData, function (i, v) {
                     data[""+v.name+""] = v.value;
                 })
@@ -537,10 +636,12 @@
                 e.preventDefault();
                 let data = {};
 
-                let checkItem = $('.file-item-checkbox input[type=checkbox]:checked').map(function () {return $(this).val();}).get();
+                let checkFolder = $('.file-item-checkbox-folder input[type=checkbox]:checked').map(function () {return $(this).val();}).get();
+                let checkImage = $('.file-item-checkbox-image input[type=checkbox]:checked').map(function () {return $(this).val();}).get();
 
                 let classList = $(this).attr('class').split(/\s+/);
-                data[classList[1]+'Folders'] = checkItem;
+                data[classList[1]+'Folders'] = checkFolder;
+                data[classList[1]+'Images'] = checkImage;
                 data['folderPath'] = $(this).val();
                 data['updateType'] = classList[1];
                 console.log(data);

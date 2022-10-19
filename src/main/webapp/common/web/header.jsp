@@ -70,7 +70,7 @@
                     <li class="has-children">
                         <a href="#0" title="">
 
-                            <img src="<c:url value="/image/${sessionScope.get('UserModel').avatar}"/>"
+                            <img src="<c:url value="/image?type=avatar&filename=${sessionScope.get('UserModel').avatar}"/>"
                             style="vertical-align: middle;width: 40px;height: 40px;border-radius: 50%;">
                             &ensp;${sessionScope.get('UserModel').fullName}
                         </a>

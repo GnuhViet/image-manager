@@ -23,6 +23,9 @@ public class FolderModel {
     private List<String> moveFolders;
     private List<String> copyFolders;
     private List<String> removeFolders;
+    private List<String> moveImages;
+    private List<String> copyImages;
+    private List<String> removeImages;
     private UpdateType updateType;
 
     public String getRealPathOf(String folderPath) {
@@ -123,5 +126,29 @@ public class FolderModel {
 
     public void setRemoveFolders(List<String> removeFolders) {
         this.removeFolders = removeFolders;
+    }
+
+    public List<String> getMoveImages() {
+        return moveImages;
+    }
+
+    public void setMoveImages(List<String> moveImages) {
+        this.moveImages = moveImages;
+    }
+
+    public List<String> getCopyImages() {
+        return copyImages;
+    }
+
+    public void setCopyImages(List<String> copyImages) {
+        this.copyImages = copyImages;
+    }
+
+    public List<String> getRemoveImages() {
+        return removeImages;
+    }
+
+    public void setRemoveImages(List<String> removeImages) {
+        this.removeImages = removeImages;
     }
 }

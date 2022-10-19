@@ -68,7 +68,6 @@ public class FolderApi extends HttpServlet {
         FolderModel updateModel = HttpUtil.of(req.getReader()).toModel(FolderModel.class);
         updateModel.setUserId(curr.getId());
 
-        // new copy hay move thi tao cookies khong thi perform update
         ObjectMapper mapper = new ObjectMapper();
         String updateMsg = null;
 
